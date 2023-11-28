@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSellerDto } from './dto/create-seller.dto';
 import { UpdateSellerDto } from './dto/update-seller.dto';
+import { Seller } from './entities/seller.entity';
 
 @Injectable()
 export class SellerService {
+  constructor(
+    @InjectRepository(Seller)
+    private sellerRepository: Repository<Seller>,
+  ) {}
+
   create(createSellerDto: CreateSellerDto) {
-    return 'This action adds a new seller';
+    return this.sellerRepository.create(createSellerDto);
   }
 
   findAll() {
@@ -17,7 +25,7 @@ export class SellerService {
   }
 
   update(id: number, updateSellerDto: UpdateSellerDto) {
-    return `This action updates a #${id} seller`;
+    return this.sellerRepository.update(id, updateSellerDto);
   }
 
   remove(id: number) {
