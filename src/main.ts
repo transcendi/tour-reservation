@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { Seller, Tour } from "./entities/entities"
+import { Seller, Tour, Customer, Reservation } from "./entities/entities"
 
 const AppDataSource = new DataSource({
     type: 'mysql',
@@ -12,7 +12,7 @@ const AppDataSource = new DataSource({
     username: 'tour-reservation',
     password: 'aA1!aA1!',
     database: 'tour_reservation',
-    entities: [Seller, Tour],
+    entities: [Seller, Tour, Customer, Reservation],
     synchronize: true,
     logging: false,
 })

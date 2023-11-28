@@ -6,7 +6,7 @@ import { SellerModule } from './seller/seller.module';
 import { TourModule } from './tour/tour.module';
 import { CustomerModule } from './customer/customer.module';
 import { ReservationModule } from './reservation/reservation.module';
-import { Seller, Tour } from './entities/entities';
+import { Seller, Tour, Customer, Reservation } from './entities/entities';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { Seller, Tour } from './entities/entities';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
-      Seller, Tour
+      Seller, Tour, Customer, Reservation
     ]),
     SellerModule, TourModule, CustomerModule, ReservationModule],
   controllers: [AppController],
