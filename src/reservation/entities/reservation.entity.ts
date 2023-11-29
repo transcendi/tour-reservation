@@ -14,9 +14,6 @@ export class Reservation {
   id: number;
 
   @Column()
-  name: string;
-
-  @Column()
   date: Date;
 
   @Column({
@@ -24,6 +21,9 @@ export class Reservation {
     enum: ReservationState
   })
   state: ReservationState;
+
+  @Column()
+  token: string;
 
   @ManyToOne(() => Tour, (tour) => tour.reservations)
   tour: Tour;
