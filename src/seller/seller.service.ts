@@ -15,20 +15,7 @@ export class SellerService {
     return await this.sellerRepository.save(createSellerDto);
   }
 
-  findAll() {
-    return `This action returns all seller`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} seller`;
-  }
-
   update(id: number, updateSellerDto: UpdateSellerDto) {
-    // return this.sellerRepository.update(id, updateSellerDto);
-    return '';
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} seller`;
+    return this.sellerRepository.update(id, updateSellerDto);
   }
 }
