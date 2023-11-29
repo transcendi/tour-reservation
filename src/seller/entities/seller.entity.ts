@@ -9,10 +9,10 @@ export class Seller {
   @Column()
   name: string;
 
-  @Column('simple-array')
+  @Column('simple-array', {nullable: true})
   rest_days: number[];
 
-  @Column('simple-array')
+  @Column('simple-array', {nullable: true})
   days_off: number[];
 
   @OneToMany(() => Tour, (tour) => tour.seller)
