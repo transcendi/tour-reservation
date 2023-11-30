@@ -17,11 +17,7 @@ export class CustomerService {
   }
 
   async findOne(id: number) {
-    return await this.customerRepository.findOne({
-      where: {
-        id
-      }
-    });
+    return await this.customerRepository.findOne({ where: { id } });
   }
 
   async update(id: number, updateCustomerDto: UpdateCustomerDto) {

@@ -34,6 +34,7 @@
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
       "rxjs": "^7.8.1",
+      "save-dev": "0.0.1-security",
       "typeorm": "0.3.17"
    },
    "devDependencies": {

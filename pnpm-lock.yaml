@@ -44,6 +44,9 @@ dependencies:
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
+  save-dev:
+    specifier: 0.0.1-security
+    version: 0.0.1-security
   typeorm:
     specifier: 0.3.17
     version: 0.3.17(mysql2@3.6.5)(pg@8.11.3)(ts-node@10.7.0)
@@ -895,6 +898,8 @@ packages:
       shelljs: 0.8.5
       source-map-support: 0.5.21
       tree-kill: 1.2.2
+      tsconfig-paths: 4.2.0
+      tsconfig-paths-webpack-plugin: 4.1.0
       typescript: 5.2.2
       webpack: 5.89.0
       webpack-node-externals: 3.0.0
@@ -4882,6 +4887,10 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  /save-dev@0.0.1-security:
+    resolution: {integrity: sha512-k6knZTDNK8PKKbIqnvxiOveJinuw2LcQjqDoaorZWP9M5AR2EPsnpDeSbeoZZ0pHr5ze1uoaKdK8NBGQrJ34Uw==}
+    dev: false
 
   /schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}

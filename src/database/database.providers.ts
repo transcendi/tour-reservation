@@ -2,8 +2,8 @@ import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
-    provide: 'DATA_SOURCE',
-    useFactory: async () => {
+    provide: 'DATA_SOURCE', // FIXME!! : use constants file instead magic string
+    useFactory: async () => { // FIXME!! : use config(https://docs.nestjs.com/techniques/configuration)
       const dataSource = new DataSource({
         type: 'mysql',
         host: 'localhost',
@@ -15,6 +15,7 @@ export const databaseProviders = [
             __dirname + '/../**/*.entity{.ts,.js}',
         ],
         synchronize: true,
+        logging: true
       });
 
       return dataSource.initialize();

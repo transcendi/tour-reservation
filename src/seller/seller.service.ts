@@ -17,11 +17,7 @@ export class SellerService {
   }
 
   async findOne(id: number) {
-    return await this.sellerRepository.findOne({
-      where: {
-        id
-      }
-    });
+    return await this.sellerRepository.findOne({ where: { id }});
   }
 
   async update(id: number, updateSellerDto: UpdateSellerDto) {

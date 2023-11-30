@@ -12,12 +12,12 @@ export class CustomerController {
   @ApiOperation({ summary: 'Create Customer' })
   @ApiConsumes('application/json')
   @ApiBody({
-    description: 'Data for create customer',
     type: CreateCustomerDto,
+    required: true
   })
   @ApiResponse({
     status: 201,
-    description: 'Success',
+    description: 'Created',
   })
   create(@Body() createCustomerDto: CreateCustomerDto) {
     return this.customerService.create(createCustomerDto);
