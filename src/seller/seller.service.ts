@@ -22,9 +22,10 @@ export class SellerService {
         id
       }
     });
+    // MySQL Array retrun only string so convert to number
     if(seller !== null) {
-      seller.rest_days = seller.rest_days.map(Number);
-      seller.days_off = seller.days_off.map(Number);
+      seller.off_days = seller.off_days.map(Number);
+      seller.off_dates = seller.off_dates.map(Number);
     }
     return seller;
   }

@@ -24,17 +24,17 @@ describe('SellerService', () => {
   });
 
   describe('CRUD', () => {
-    it('should create seller', async () => {
+    it('should create, read, update, delete seller', async () => {
       const sellerDto: CreateSellerDto = {
         id: 1,
         name: 'First Seller',
-        rest_days: [6, 7],
-        days_off: [1, 5, 10]
+        off_days: [6, 7],
+        off_dates: [1, 5, 10]
       };
       await service.create(sellerDto);
       let seller = await service.findOne(1);
       expect(seller).toEqual(sellerDto);
-      sellerDto.days_off = [15, 30];
+      sellerDto.off_dates = [15, 30];
       await service.update(1, sellerDto);
       seller = await service.findOne(1);
       expect(seller).toEqual(sellerDto);
