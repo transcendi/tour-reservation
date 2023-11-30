@@ -38,7 +38,7 @@ describe('SellerService', () => {
       await service.update(1, sellerDto);
       seller = await service.findOne(1);
       expect(seller).toEqual(sellerDto);
-      await service.delete(1);
+      await service.remove(1);
       seller = await service.findOne(1);
       expect(seller).toBeNull();
     });

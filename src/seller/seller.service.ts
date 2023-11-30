@@ -34,7 +34,7 @@ export class SellerService {
     return await this.sellerRepository.update(id, updateSellerDto);
   }
 
-  async delete(id: number) {
+  async remove(id: number) {
     return await this.sellerRepository.delete(id);
   }
 }

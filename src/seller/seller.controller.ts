@@ -13,7 +13,7 @@ export class SellerController {
   @ApiOperation({ summary: 'Create Seller' })
   @ApiConsumes('application/json')
   @ApiBody({
-    description: 'post swagger',
+    description: 'Data for create seller',
     type: CreateSellerDto,
   })
   @ApiResponse({
