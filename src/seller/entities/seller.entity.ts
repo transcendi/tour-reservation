@@ -9,12 +9,6 @@ export class Seller {
   @Column()
   name: string;
 
-  @Column('simple-array', {nullable: true})
-  off_days: number[];
-
-  @Column('simple-array', {nullable: true})
-  off_dates: number[];
-
   @OneToMany(() => Tour, (tour) => tour.seller)
   tours: Tour[];
 }

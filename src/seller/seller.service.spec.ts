@@ -27,14 +27,12 @@ describe('SellerService', () => {
     it('should create, read, update, delete seller', async () => {
       const sellerDto: CreateSellerDto = {
         id: 1,
-        name: 'First Seller',
-        off_days: [6, 7],
-        off_dates: [1, 5, 10]
+        name: 'First Seller'
       };
       await service.create(sellerDto);
       let seller = await service.findOne(1);
       expect(seller).toEqual(sellerDto);
-      sellerDto.off_dates = [15, 30];
+      sellerDto.name = 'One Seller';
       await service.update(1, sellerDto);
       seller = await service.findOne(1);
       expect(seller).toEqual(sellerDto);

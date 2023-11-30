@@ -10,6 +10,12 @@ export class Tour {
   @Column()
   name: string;
 
+  @Column('simple-array', {nullable: true})
+  off_days: number[];
+
+  @Column('simple-array', {nullable: true})
+  off_dates: number[];
+
   @ManyToOne(() => Seller, (seller) => seller.tours)
   seller: Seller;
 

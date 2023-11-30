@@ -13,6 +13,12 @@ export class TourService {
   }
 
   findOne(id: number) {
+    
+    // MySQL Array retrun only string so convert to number
+    // if(seller !== null) {
+    //   seller.off_days = seller.off_days.map(Number);
+    //   seller.off_dates = seller.off_dates.map(Number);
+    // }
     return `This action returns a #${id} tour`;
   }
 

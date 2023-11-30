@@ -23,6 +23,23 @@ export class TourController {
   }
 
   @Patch(':id')
+  // @ApiOperation({ summary: 'Update Seller for holiday settings' })
+  // @ApiParam({
+  //   name: 'id',
+  //   type: 'number',
+  // })
+  // @ApiConsumes('application/json')
+  // @ApiBody({
+  //   description: 'post swagger',
+  //   type: UpdateSellerDto,
+  // })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'Success',
+  // })
+  // update(@Param('id') id: string, @Body() updateSellerDto: UpdateSellerDto) {
+  //   return this.sellerService.update(+id, updateSellerDto);
+  // }
   update(@Param('id') id: string, @Body() updateTourDto: UpdateTourDto) {
     return this.tourService.update(+id, updateTourDto);
   }

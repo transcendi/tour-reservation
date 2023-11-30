@@ -17,17 +17,11 @@ export class SellerService {
   }
 
   async findOne(id: number) {
-    const seller = await this.sellerRepository.findOne({
+    return await this.sellerRepository.findOne({
       where: {
         id
       }
     });
-    // MySQL Array retrun only string so convert to number
-    if(seller !== null) {
-      seller.off_days = seller.off_days.map(Number);
-      seller.off_dates = seller.off_dates.map(Number);
-    }
-    return seller;
   }
 
   async update(id: number, updateSellerDto: UpdateSellerDto) {
