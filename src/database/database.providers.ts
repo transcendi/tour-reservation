@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE', // FIXME!! : use constants file instead magic string
-    useFactory: async () => { // FIXME!! : use config(https://docs.nestjs.com/techniques/configuration)
+    useFactory: async () => { // FIXME!! : use configuration
       const dataSource = new DataSource({
         type: 'mysql',
         host: 'localhost',
