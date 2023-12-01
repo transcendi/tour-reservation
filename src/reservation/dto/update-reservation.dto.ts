@@ -3,6 +3,8 @@ import { ReservationState } from '../entities/reservation.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateReservationDto {
+  token: string;
+
   @ApiProperty({ 
     description: 'State of tour',
     // type: forwardRef(() => ReservationState) // FIXME!! : Causes circular references

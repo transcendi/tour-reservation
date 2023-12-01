@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Relation } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Generated, Index, ManyToOne } from 'typeorm';
 import { Customer } from '../../customer/entities/customer.entity';
 import { Tour } from '../../tour/entities/tour.entity';
 
@@ -12,6 +12,11 @@ export enum ReservationState {
 export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Index()
+  @Column()
+  @Generated("uuid")
+  token: string;
 
   @Column()
   date: Date;

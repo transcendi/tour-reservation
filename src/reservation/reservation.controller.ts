@@ -12,7 +12,6 @@ export class ReservationController {
 
   @Post()
   @ApiOperation({ summary: 'Create Tour' })
-  @ApiConsumes('application/json')
   @ApiHeader({
     name: 'customer-id',
     description: 'Id of customer who book the reservation',
@@ -23,6 +22,7 @@ export class ReservationController {
     type: 'number',
     required: true
   })
+  @ApiConsumes('application/json')
   @ApiBody({
     type: CreateReservationDto,
     required: true
@@ -31,7 +31,10 @@ export class ReservationController {
     status: 201,
     description: 'Success',
   })
-  create(@Headers('customer-id') customerId: number, @Query('tour-id') tourId: number, @Body() createReservationDto: CreateReservationDto) {
+  create(
+    @Headers('customer-id') customerId: number, 
+    @Query('tour-id') tourId: number, 
+    @Body() createReservationDto: CreateReservationDto) {
     return this.reservationService.create(customerId, tourId, createReservationDto);
   }
 
@@ -41,18 +44,21 @@ export class ReservationController {
     name: 'token',
     type: 'string'
   })
-  @ApiResponse({ // FIXME!! : define response
-    type: Reservation
+  @ApiResponse({ 
+    type: Reservation // FIXME!! : define response
   })
   findOneByToken(@Param('token') token: string) {
-    // TODO : use token instead of id
     return this.reservationService.findOneByToken(token);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update Reservation state' })
+  @ApiHeader({
+    name: 'call-by',
+    description: 'Role of requesting client, "Seller" or "Customer"'
+  })
   @ApiParam({
-    name: 'id',
+    name: 'token',
     type: 'number'
   })
   @ApiConsumes('application/json')
@@ -64,21 +70,13 @@ export class ReservationController {
     status: 200,
     description: 'OK',
   })
-  update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-    return this.reservationService.update(+id, updateReservationDto);
+  updateByToken(
+    @Param('token') token: string, 
+    @Headers('call-by') callBy: string, 
+    @Body() updateReservationDto: UpdateReservationDto) {
+    if(callBy == 'Customer') {
+      return this.reservationService.updateByTokenFromCustomer(token, updateReservationDto);      
+    }
+    return this.reservationService.updateByToken(token, updateReservationDto);
   }
-
-  // @Delete('/token/:token')
-  // @ApiOperation({ summary: 'Update Tour for holiday settings' })
-  // @ApiParam({
-  //   name: 'token',
-  //   type: 'string'
-  // })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'OK',
-  // })
-  // delete(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
-  //   return this.reservationService.update(+id, updateReservationDto);
-  // }
 }

@@ -4,7 +4,6 @@ import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Reservation, ReservationState } from './entities/reservation.entity';
 import { Tour } from '../tour/entities/tour.entity';
-import { TourService } from '../tour/tour.service';
 import { Customer } from '../customer/entities/customer.entity';
 
 @Injectable()
@@ -12,13 +11,26 @@ export class ReservationService {
   constructor(
     @Inject('RESERVATION_REPOSITORY')
     private reservationRepository: Repository<Reservation>,
+    @Inject('TOUR_REPOSITORY')
+    private tourRepository: Repository<Tour>,
     @Inject('DATA_SOURCE')
     private dataSource: DataSource,
-    private tourService: TourService
   ) {}
 
   async create(customerId: number, tourId: number, createReservationDto: CreateReservationDto) {
-    const tour = await this.tourService.findOne(tourId);
+    // get tour
+    const tour: Tour = await this.tourRepository.findOne({ 
+      relations: ['seller'],
+      where: { id: tourId }
+    });
+    if(!tour) {
+      throw new HttpException('Find a tour error', HttpStatus.NOT_FOUND );
+    }
+    // MySQL Array retrun only strings so convert to number
+    tour.offDays = tour.offDays?.map(Number);
+    tour.offDates = tour.offDates?.map(Number);
+
+    // check is unavailable date
     const inputDate = createReservationDto.date;
     const tourDate = new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate(), 9);
     if(tour.offDays.includes(createReservationDto.date.getUTCDay())
@@ -26,8 +38,10 @@ export class ReservationService {
       throw new HttpException('Unavailable date', HttpStatus.CONFLICT );      
     }
 
+    // FIXME!! : group by transaction...
+
     // get confirmed reservations of input date owns owner of tour
-    const tours = await this.tourService.findAll({
+    const tours = await this.tourRepository.find({
       relations: {
         seller: true,
         reservations: true
@@ -75,29 +89,31 @@ export class ReservationService {
   async findOne(id: number): Promise<Reservation> {    
     return await this.reservationRepository.findOne({ where: { id }});
   }
-
-  async findOneByToken(token: String): Promise<Reservation> {
-    // TODO : convert token to id
-    const id = 1;
-    return this.findOne(id);
+  
+  async findOneByToken(token: string): Promise<Reservation> {
+    return this.reservationRepository.findOneBy({ token });
   }
 
-  async update(id: number, updateReservationDto: UpdateReservationDto) {
-    // confirm by Seller
-    // id = redis.get(token)
-    // reservation.update(id, state = confirm)
-    // redis.expire(token)
-
-    return await this.reservationRepository.update(id, updateReservationDto);
+  async updateByToken(token: string, updateReservationDto: UpdateReservationDto) {
+    // set token expired
+    updateReservationDto.token = token.replace('-', '_');
+    return await this.reservationRepository.update({ token }, updateReservationDto);
   }
 
+  async updateByTokenFromCustomer(token: string, updateReservationDto: UpdateReservationDto) {
+    const reservation = await this.findOneByToken(token);
+    if(!reservation) {
+      throw new HttpException('Invalid reservation token', HttpStatus.NOT_FOUND );
+    }
+    // cannot update 3 days before tour
+    if((reservation.date.getTime() - (new Date()).getTime())/(24 * 3600 * 1000) < 3) {
+      throw new HttpException('Update unavailable date', HttpStatus.BAD_REQUEST );
+    }
+
+    return await this.updateByToken(token, updateReservationDto);
+  }
+  
   async remove(id: number) {
-    // cancel by Customer
-    // id = redis.get(token)
-    // if(date - now > 3)
-    //  fail
-    // reservation.update(id, state = cancel)
-    // redis.expire(token)
     return await this.reservationRepository.delete(id);
   }
 }

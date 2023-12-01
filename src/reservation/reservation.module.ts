@@ -3,16 +3,16 @@ import { ReservationService } from './reservation.service';
 import { ReservationController } from './reservation.controller';
 import { DatabaseModule } from '../database/database.module';
 import { reservationProviders } from './reservation.providers';
-import { TourModule } from '../tour/tour.module';
+import { tourProviders } from '../tour/tour.providers';
 
 @Module({
   imports: [
-    DatabaseModule,
-    TourModule
+    DatabaseModule
   ],
   controllers: [ReservationController],
   providers: [
     ...reservationProviders,
+    ...tourProviders,
     ReservationService
   ],
 })

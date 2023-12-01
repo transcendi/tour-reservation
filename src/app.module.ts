@@ -6,10 +6,21 @@ import { TourModule } from './tour/tour.module';
 import { CustomerModule } from './customer/customer.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { DatabaseModule } from './database/database.module';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 @Module({
   imports: [
-    SellerModule, TourModule, CustomerModule, ReservationModule, DatabaseModule],
+    SellerModule, 
+    TourModule, 
+    CustomerModule, 
+    ReservationModule, 
+    DatabaseModule, 
+    RedisModule.forRoot({
+      config: {
+        host: 'localhost',
+        port: 6379
+      }
+    })],
   controllers: [AppController],
   providers: [AppService]
 })

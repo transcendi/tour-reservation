@@ -4,6 +4,8 @@ import { CreateTourDto } from './dto/create-tour.dto';
 import { UpdateTourDto } from './dto/update-tour.dto';
 import { Seller } from '../seller/entities/seller.entity';
 import { Tour } from './entities/tour.entity';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
 
 @Injectable()
 export class TourService {
@@ -12,6 +14,8 @@ export class TourService {
     private tourRepository: Repository<Tour>,
     @Inject('DATA_SOURCE')
     private dataSource: DataSource,
+    @InjectRedis()
+    private readonly redis: Redis
   ) {}
 
   async create(sellerId: number, createTourDto: CreateTourDto) {
@@ -32,6 +36,15 @@ export class TourService {
   }
 
   async findAllAvailableDatesMonth(id: number, yearMonth: Date): Promise<Date[]> {
+    // generate redis key
+    const redisKey = `tour:${id}:schedule:`
+    + `${yearMonth.getUTCFullYear()}:${yearMonth.getUTCMonth()}`;
+    // if cached schedule exist return
+    const cachedSchedule = await this.redis.get(redisKey);
+    if(cachedSchedule) {
+      return JSON.parse(cachedSchedule);
+    }
+
     const tour: Tour = await this.findOne(id);
     if(!tour) {
       throw new HttpException('Find a tour error', HttpStatus.NOT_FOUND );
@@ -47,6 +60,10 @@ export class TourService {
       }
       dates.push(new Date(d));
     }
+
+    // set cache
+    await this.redis.set(redisKey, JSON.stringify(dates));
+
     return dates;
   }
 
@@ -65,6 +82,12 @@ export class TourService {
   }
 
   async update(id: number, updateTourDto: UpdateTourDto) {
+    // refresh cache
+    // TODO : implement refresh cache
+    // // generate redis key
+    // const redisKey = `tour:${id}:schedule:`
+    // + `${yearMonth.getUTCFullYear()}:${yearMonth.getUTCMonth()}`;
+    // this.redis.scan()
     return await this.tourRepository.update(id, updateTourDto);
   }
 
