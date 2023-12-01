@@ -35,45 +35,54 @@ export class ReservationService {
     const tourDate = new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate(), 9);
     if(tour.offDays.includes(tourDate.getUTCDay())
       || tour.offDates.includes(tourDate.getUTCDate())) {
-      throw new HttpException('Unavailable date', HttpStatus.CONFLICT );      
+      throw new HttpException('Unavailable date', HttpStatus.CONFLICT );
     }
     createReservationDto.date = tourDate;
 
-    // FIXME!! : group by transaction...
-
-    // get confirmed reservations of input date owns owner of tour
-    const tours = await this.tourRepository.find({
-      relations: {
-        seller: true,
-        reservations: true
-      },
-      where: {
-        seller: {
-          id: tour.seller.id
+    let reservation;
+    let insertResult;
+    await this.dataSource.transaction(async (transactionalEntityManager) => {
+      const tourRepository = transactionalEntityManager.getRepository(Tour);
+      const reservationRepository = transactionalEntityManager.getRepository(Reservation);
+      
+      // get confirmed reservations of input date owns owner of tour
+      const tours = await tourRepository.find({
+        relations: {
+          seller: true,
+          reservations: true
         },
-        reservations: {
-          state: ReservationState.CONFIRM,
-          date: tourDate
+        where: {
+          seller: {
+            id: tour.seller.id
+          },
+          reservations: {
+            state: ReservationState.CONFIRM,
+            date: tourDate
+          }
         }
+      });
+
+      let confirmCount = 0;
+      for(const tour of tours) {
+        confirmCount += tour.reservations?.length ?? 0;
       }
+
+      // if count > 5 set state pending else confirm
+      if(confirmCount >= 5) {
+        createReservationDto.state = ReservationState.PENDING;
+      }
+      else {
+        createReservationDto.state = ReservationState.CONFIRM;
+      }
+
+      // insert
+      reservation = reservationRepository.create(createReservationDto);
+      insertResult = await reservationRepository.insert(reservation);
     });
-
-    let confirmCount = 0;
-    for(const tour of tours) {
-      confirmCount += tour.reservations?.length ?? 0;
+    if(!reservation || !insertResult || insertResult.identifiers.length == 0) {
+      throw new HttpException('Create reservation error', HttpStatus.INTERNAL_SERVER_ERROR );      
     }
-
-    // if count > 5 set state pending else confirm
-    if(confirmCount >= 5) {
-      createReservationDto.state = ReservationState.PENDING;
-    }
-    else {
-      createReservationDto.state = ReservationState.CONFIRM;
-    }
-
-    // insert and set relation
-    const reservation = this.reservationRepository.create(createReservationDto);
-    const insertResult = await this.reservationRepository.insert(reservation);
+    // set relation
     try {
       await this.dataSource.createQueryBuilder().
         relation(Customer, 'reservations').of(customerId).add(insertResult.identifiers[0].id);

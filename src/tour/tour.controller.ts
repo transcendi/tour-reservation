@@ -48,7 +48,7 @@ export class TourController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update Tour for holiday settings' })
+  @ApiOperation({ summary: 'Update Tour' })
   @ApiParam({
     name: 'id',
     type: 'number'

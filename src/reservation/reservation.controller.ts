@@ -11,7 +11,7 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create Tour' })
+  @ApiOperation({ summary: 'Create Reservation' })
   @ApiHeader({
     name: 'customer-id',
     description: 'Id of customer who book the reservation',
@@ -54,7 +54,7 @@ export class ReservationController {
   }
 
   @Patch('/token/:token')
-  @ApiOperation({ summary: 'Update Reservation state' })
+  @ApiOperation({ summary: 'Update Reservation' })
   @ApiHeader({
     name: 'call-by',
     description: 'Role of requesting client, "Seller" or "Customer"'
