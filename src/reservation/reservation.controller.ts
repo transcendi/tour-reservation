@@ -51,7 +51,7 @@ export class ReservationController {
     return this.reservationService.findOneByToken(token);
   }
 
-  @Patch(':id')
+  @Patch('/token/:token')
   @ApiOperation({ summary: 'Update Reservation state' })
   @ApiHeader({
     name: 'call-by',

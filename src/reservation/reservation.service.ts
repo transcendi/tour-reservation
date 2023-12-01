@@ -110,7 +110,6 @@ export class ReservationService {
     if((reservation.date.getTime() - (new Date()).getTime())/(24 * 3600 * 1000) < 3) {
       throw new HttpException('Update unavailable date', HttpStatus.BAD_REQUEST );
     }
-
     return await this.updateByToken(token, updateReservationDto);
   }
   
