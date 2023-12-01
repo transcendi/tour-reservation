@@ -4,19 +4,21 @@ import { CreateTourDto } from './dto/create-tour.dto';
 import { UpdateTourDto } from './dto/update-tour.dto';
 import { Seller } from '../seller/entities/seller.entity';
 import { Tour } from './entities/tour.entity';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
+import { RedisService } from '@liaoliaots/nestjs-redis';
 
 @Injectable()
 export class TourService {
+  private readonly cache: Redis;
   constructor(
     @Inject('TOUR_REPOSITORY')
     private tourRepository: Repository<Tour>,
     @Inject('DATA_SOURCE')
     private dataSource: DataSource,
-    @InjectRedis()
-    private readonly redis: Redis
-  ) {}
+    private readonly redisService: RedisService
+  ) {
+    this.cache = redisService.getClient();
+  }
 
   async create(sellerId: number, createTourDto: CreateTourDto) {
     const tour = this.tourRepository.create(createTourDto);
@@ -37,10 +39,10 @@ export class TourService {
 
   async findAllAvailableDatesMonth(id: number, yearMonth: Date): Promise<Date[]> {
     // generate redis key
-    const redisKey = `tour:${id}:schedule:`
+    const cacheKey = `tour:${id}:schedule:`
     + `${yearMonth.getUTCFullYear()}:${yearMonth.getUTCMonth()}`;
     // if cached schedule exist return
-    const cachedSchedule = await this.redis.get(redisKey);
+    const cachedSchedule: string = await this.cache.get(cacheKey);
     if(cachedSchedule) {
       return JSON.parse(cachedSchedule);
     }
@@ -62,7 +64,7 @@ export class TourService {
     }
 
     // set cache
-    await this.redis.set(redisKey, JSON.stringify(dates));
+    await this.cache.set(cacheKey, JSON.stringify(dates));
 
     return dates;
   }

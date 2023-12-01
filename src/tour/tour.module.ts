@@ -5,7 +5,9 @@ import { DatabaseModule } from '../database/database.module';
 import { tourProviders } from './tour.providers';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [
+    DatabaseModule
+  ],
   controllers: [TourController],
   providers: [
     ...tourProviders,
