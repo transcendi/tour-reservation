@@ -1,5 +1,5 @@
 import { Injectable, Inject, HttpStatus, HttpException } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindManyOptions, Repository } from 'typeorm';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { UpdateTourDto } from './dto/update-tour.dto';
 import { Seller } from '../seller/entities/seller.entity';
@@ -14,7 +14,7 @@ export class TourService {
     private dataSource: DataSource,
   ) {}
 
-  async create(createTourDto: CreateTourDto, sellerId: number) {
+  async create(sellerId: number, createTourDto: CreateTourDto) {
     const tour = this.tourRepository.create(createTourDto);
     const insertResult = await this.tourRepository.insert(tour);
     try {
@@ -22,9 +22,13 @@ export class TourService {
         relation(Seller, 'tours').of(sellerId).add(insertResult.identifiers[0].id);
     }
     catch(error) {
-      throw new HttpException('Create tour error', HttpStatus.INTERNAL_SERVER_ERROR );
+      throw new HttpException('Set tour relation error', HttpStatus.CONFLICT );
     }
     return tour;
+  }
+
+  async findAll(options?: FindManyOptions<Tour>) {
+    return await this.tourRepository.find(options)
   }
 
   async findAllAvailableDatesMonth(id: number, yearMonth: Date): Promise<Date[]> {
@@ -32,6 +36,7 @@ export class TourService {
     if(!tour) {
       throw new HttpException('Find a tour error', HttpStatus.NOT_FOUND );
     }
+    // find dates excluding off days and off dates in a given month
     const from = new Date(yearMonth.getUTCFullYear(), yearMonth.getUTCMonth(), 1, 9);
     const to = new Date(yearMonth.getUTCFullYear(), yearMonth.getUTCMonth() + 1, 1, 9);
     const dates = [];
@@ -45,8 +50,11 @@ export class TourService {
     return dates;
   }
 
-  async findOne(id: number) {
-    const tour: Tour = await this.tourRepository.findOne({ where: { id }});
+  async findOne(id: number): Promise<Tour> {
+    const tour: Tour = await this.tourRepository.findOne({ 
+      relations: ['seller'],
+      where: { id }
+    });
     if(!tour) {
       throw new HttpException('Find a tour error', HttpStatus.NOT_FOUND );
     }
@@ -54,12 +62,6 @@ export class TourService {
     tour.offDays = tour.offDays?.map(Number);
     tour.offDates = tour.offDates?.map(Number);
     return tour;
-  }
-
-  async findOneByToken(token: String) {
-    // TODO : convert token to id
-    const id = 1;
-    return this.findOne(id);
   }
 
   async update(id: number, updateTourDto: UpdateTourDto) {

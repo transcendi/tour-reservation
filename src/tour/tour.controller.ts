@@ -3,7 +3,6 @@ import { TourService } from './tour.service';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { UpdateTourDto } from './dto/update-tour.dto';
 import { ApiTags, ApiOperation, ApiParam, ApiConsumes, ApiHeader, ApiBody, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { Tour } from './entities/tour.entity'
 
 @Controller('tour')
 @ApiTags('Tour')
@@ -24,12 +23,12 @@ export class TourController {
   })
   @ApiResponse({
     status: 201,
-    description: 'Success',
+    description: 'Success'
   })
-  create(@Body() createTourDto: CreateTourDto, @Headers('seller-id') sellerId: number) {
+  create(@Headers('seller-id') sellerId: number, @Body() createTourDto: CreateTourDto) {
     // FIXME!! : use guard
     // FIXME!! : get seller id from caller identifiers
-    return this.tourService.create(createTourDto, sellerId);
+    return this.tourService.create(+sellerId, createTourDto);
   }
 
   @Get('/schedule/:id')
@@ -44,28 +43,14 @@ export class TourController {
     type: 'string'
   })
   findAllAvailableDatesMonth(@Param('id') id: number, @Query('year-month') yearMonth: string) {    
-    return this.tourService.findAllAvailableDatesMonth(id, new Date(yearMonth));
-  }
-
-  @Get('/token/:token')
-  @ApiOperation({ summary: 'Get a tour by token' })
-  @ApiParam({
-    name: 'token',
-    type: 'string'
-  })
-  @ApiResponse({ // FIXME!! : define response
-    type: Tour
-  })
-  findOneByToken(@Param('token') token: string) {
-    // TODO : use token instead of id
-    return this.tourService.findOneByToken(token);
+    return this.tourService.findAllAvailableDatesMonth(+id, new Date(yearMonth));
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update Tour for holiday settings' })
   @ApiParam({
     name: 'id',
-    type: 'number',
+    type: 'number'
   })
   @ApiConsumes('application/json')
   @ApiBody({

@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
-import { Tour } from '../../tour/entities/tour.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, Relation } from 'typeorm';
 import { Customer } from '../../customer/entities/customer.entity';
+import { Tour } from '../../tour/entities/tour.entity';
 
 export enum ReservationState {
   PENDING = "pending",
@@ -22,12 +22,9 @@ export class Reservation {
   })
   state: ReservationState;
 
-  @Column()
-  token: string;
+  @ManyToOne(() => Customer, (customer) => customer.reservations)
+  customer: Customer;
 
   @ManyToOne(() => Tour, (tour) => tour.reservations)
   tour: Tour;
-
-  @ManyToOne(() => Tour, (customer) => customer.reservations)
-  customer: Customer;
 }

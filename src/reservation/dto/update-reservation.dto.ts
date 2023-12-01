@@ -1,8 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateReservationDto } from './create-reservation.dto';
+// import { forwardRef } from '@nestjs/common';
 import { ReservationState } from '../entities/reservation.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdateReservationDto extends PartialType(CreateReservationDto) {
-  id: number;
+export class UpdateReservationDto {
+  @ApiProperty({ 
+    description: 'State of tour',
+    // type: forwardRef(() => ReservationState) // FIXME!! : Causes circular references
+  })
   state: ReservationState;
 }

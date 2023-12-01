@@ -11,5 +11,8 @@ import { tourProviders } from './tour.providers';
     ...tourProviders,
     TourService
   ],
+  exports: [
+    TourService
+  ]
 })
 export class TourModule {}
