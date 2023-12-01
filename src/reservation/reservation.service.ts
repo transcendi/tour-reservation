@@ -31,12 +31,13 @@ export class ReservationService {
     tour.offDates = tour.offDates?.map(Number);
 
     // check is unavailable date
-    const inputDate = createReservationDto.date;
+    const inputDate = new Date(createReservationDto.date);
     const tourDate = new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate(), 9);
-    if(tour.offDays.includes(createReservationDto.date.getUTCDay())
-      || tour.offDates.includes(createReservationDto.date.getUTCDate())) {
+    if(tour.offDays.includes(tourDate.getUTCDay())
+      || tour.offDates.includes(tourDate.getUTCDate())) {
       throw new HttpException('Unavailable date', HttpStatus.CONFLICT );      
     }
+    createReservationDto.date = tourDate;
 
     // FIXME!! : group by transaction...
 

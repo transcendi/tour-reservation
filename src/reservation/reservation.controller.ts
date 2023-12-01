@@ -59,7 +59,7 @@ export class ReservationController {
   })
   @ApiParam({
     name: 'token',
-    type: 'number'
+    type: 'string'
   })
   @ApiConsumes('application/json')
   @ApiBody({
