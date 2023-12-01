@@ -56,6 +56,9 @@ export class TourController {
   @ApiConsumes('application/json')
   @ApiBody({
     type: UpdateTourDto,
+    description: 'offDays is an integer array, values between 0 and 6,\n'
+      + '\trepresenting day of week, 0 for sunday 1 for monday and so on\n'
+      + 'offDates is an integer array, values between 1 and 31',
     required: true
   })
   @ApiResponse({
