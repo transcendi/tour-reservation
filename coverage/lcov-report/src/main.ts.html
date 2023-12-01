@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -81,18 +81,11 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -100,41 +93,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { NestFactory } from '@nestjs/core';</span>
+<span class="cstat-no" title="statement not covered" >import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';</span>
 <span class="cstat-no" title="statement not covered" >import { AppModule } from './app.module';</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import "reflect-metadata"</span>
-<span class="cstat-no" title="statement not covered" >import { DataSource } from "typeorm"</span>
-<span class="cstat-no" title="statement not covered" >import { Seller, Tour, Customer, Reservation } from "./entities/entities"</span>
-&nbsp;
-const AppDataSource = <span class="cstat-no" title="statement not covered" >new DataSource({</span>
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'tour-reservation',
-    password: 'aA1!aA1!',
-    database: 'tour_reservation',
-    entities: [Seller, Tour, Customer, Reservation],
-    synchronize: true,
-    logging: false,
-})
-&nbsp;
 async function <span class="fstat-no" title="function not covered" >bootstrap(</span>) {
-<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >  await AppDataSource.initialize();</span></span>
-  const <span class="cstat-no" title="statement not covered" >app = <span class="cstat-no" title="statement not covered" >await NestFactory.create(AppModule);</span></span>
+  const <span class="cstat-no" title="statement not covered" >app = <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >await NestFactory.create(AppModule);</span></span></span>
+  
+  const <span class="cstat-no" title="statement not covered" >config = new DocumentBuilder()</span>
+    .setTitle('Tour reservation')
+    .setDescription('A simple backend for customer reserve seller’s tour.')
+    .setVersion('0.1')
+    .build();
+  const <span class="cstat-no" title="statement not covered" >document = SwaggerModule.createDocument(app, config);</span>
+<span class="cstat-no" title="statement not covered" >  SwaggerModule.setup('api', app, document);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  await app.listen(3000);</span>
 }
 <span class="cstat-no" title="statement not covered" >bootstrap();</span>
@@ -145,7 +124,7 @@ async function <span class="fstat-no" title="function not covered" >bootstrap(</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-28T16:17:34.154Z
+                at 2023-12-01T23:15:18.431Z
             </div>
         <script src="../prettify.js"></script>
         <script>
