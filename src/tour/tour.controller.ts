@@ -25,9 +25,9 @@ export class TourController {
     status: 201,
     description: 'Success'
   })
+  // TODO : use guard
+  // TODO : get seller-id from caller identities
   create(@Headers('seller-id') sellerId: number, @Body() createTourDto: CreateTourDto) {
-    // FIXME!! : use guard
-    // FIXME!! : get seller id from caller identifiers
     return this.tourService.create(+sellerId, createTourDto);
   }
 
@@ -42,6 +42,7 @@ export class TourController {
     name: 'id',
     type: 'string'
   })
+  // TODO : year-month range test
   findAllAvailableDatesMonth(@Param('id') id: number, @Query('year-month') yearMonth: string) {    
     return this.tourService.findAllAvailableDatesMonth(+id, new Date(yearMonth));
   }

@@ -31,6 +31,8 @@ export class ReservationController {
     status: 201,
     description: 'Success',
   })
+  // TODO : use guard
+  // TODO : get customer-id from caller identities
   create(
     @Headers('customer-id') customerId: number, 
     @Query('tour-id') tourId: number, 
@@ -70,6 +72,8 @@ export class ReservationController {
     status: 200,
     description: 'OK',
   })
+  // TODO : use guard
+  // TODO : get seller-id from caller identities
   updateByToken(
     @Param('token') token: string, 
     @Headers('call-by') callBy: string, 
