@@ -57,7 +57,8 @@ export class ReservationController {
   @ApiOperation({ summary: 'Update Reservation' })
   @ApiHeader({
     name: 'call-by',
-    description: 'Role of requesting client, "Seller" or "Customer"'
+    description: 'Role of requesting client, "Seller" or "Customer"',
+    required: true
   })
   @ApiParam({
     name: 'token',

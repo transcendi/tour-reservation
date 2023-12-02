@@ -31,7 +31,7 @@ export class TourController {
     return this.tourService.create(+sellerId, createTourDto);
   }
 
-  @Get('/schedule/:id')
+  @Get('/:id/schedule')
   @ApiOperation({ summary: 'Get available date in a month of a tour' })
   @ApiQuery({
     name: 'year-month',
@@ -57,7 +57,7 @@ export class TourController {
   @ApiBody({
     type: UpdateTourDto,
     description: 'offDays is an integer array, values between 0 and 6,\n'
-      + '\trepresenting day of week, 0 for sunday 1 for monday and so on\n'
+      + '\trepresenting day of week, 0 for sunday 1 for monday and so on. \n'
       + 'offDates is an integer array, values between 1 and 31',
     required: true
   })
